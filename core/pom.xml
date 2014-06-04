@@ -1,37 +1,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>resource-repository-core</artifactId>
-	<packaging>jar</packaging>
-	<name>Resource Repository Core</name>
-	<description>Resource repository Core</description>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>resource-repository-core</artifactId>
+    <packaging>jar</packaging>
+    <name>Resource Repository Core</name>
+    <description>Resource repository Core</description>
 	
-	<parent>
-		<groupId>uk.co.revsys.resource-repository</groupId>
-		<artifactId>resource-repository-parent</artifactId>
-		<version>0.1.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>uk.co.revsys.resource-repository</groupId>
+        <artifactId>resource-repository-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
 
-	<dependencies>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
 		
-		<dependency>
-			<groupId>org.jclouds</groupId>
-			<artifactId>jclouds-all</artifactId>
-			<version>1.6.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.jclouds</groupId>
+            <artifactId>jclouds-all</artifactId>
+            <version>1.7.3</version>
+        </dependency>
             
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 
 

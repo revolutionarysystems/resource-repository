@@ -3,3 +3,4 @@
 /service/nb-configuration.xml
 /core/src/test/java/uk/co/revsys/resource/repository/JCloudResourceRepositoryTest.java
 /core/src/test/java/uk/co/revsys/resource/repository/LocalDiskResourceRepositoryTest.java
+/provider/target/
