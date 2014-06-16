@@ -1,4 +1,4 @@
-package uk.co.revsys.resource.repository;
+package uk.co.revsys.resource.repository.cloud;
 
 import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.RepositoryItem;
@@ -14,6 +14,7 @@ import org.jclouds.blobstore.domain.PageSet;
 import org.jclouds.blobstore.domain.StorageMetadata;
 import org.jclouds.blobstore.domain.StorageType;
 import org.jclouds.blobstore.options.ListContainerOptions;
+import uk.co.revsys.resource.repository.ResourceRepository;
 
 public class JCloudResourceRepository implements ResourceRepository {
 
@@ -75,6 +76,7 @@ public class JCloudResourceRepository implements ResourceRepository {
 
 	@Override
 	public List<Directory> listDirectories(String path) throws IOException {
+        System.out.println("listDirectories: " + path);
 		List<Directory> directories = new LinkedList<Directory>();
 		ListContainerOptions listContainerOptions = new ListContainerOptions();
 		if (!path.isEmpty()) {
@@ -94,6 +96,7 @@ public class JCloudResourceRepository implements ResourceRepository {
 
 	@Override
 	public List<Resource> listResources(String path) throws IOException {
+        System.out.println("listResources: " + path);
 		List<Resource> resources = new LinkedList<Resource>();
 		ListContainerOptions listContainerOptions = new ListContainerOptions();
 		if (!path.isEmpty()) {

@@ -12,8 +12,10 @@
 
 	<modules>
 		<module>core</module>
+        <module>cloud</module>
 		<module>service</module>
         <module>provider</module>
+        <module>provider-jackson</module>
 	</modules>
 
 	<properties>

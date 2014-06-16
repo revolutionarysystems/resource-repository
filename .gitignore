@@ -4,3 +4,6 @@
 /core/src/test/java/uk/co/revsys/resource/repository/JCloudResourceRepositoryTest.java
 /core/src/test/java/uk/co/revsys/resource/repository/LocalDiskResourceRepositoryTest.java
 /provider/target/
+/provider-jackson/target
+/cloud/target
+/cloud/src/test/java/uk/co/revsys/resource/repository/cloud/JCloudResourceRepositoryTest.java
