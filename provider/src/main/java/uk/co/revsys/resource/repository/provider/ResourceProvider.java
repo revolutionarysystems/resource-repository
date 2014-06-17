@@ -1,5 +1,6 @@
 package uk.co.revsys.resource.repository.provider;
 
+import java.io.FileNotFoundException;
 import uk.co.revsys.resource.repository.provider.handler.ResourceHandler;
 import uk.co.revsys.resource.repository.provider.filter.ResourceFilter;
 import java.io.IOException;
@@ -45,17 +46,21 @@ public class ResourceProvider implements ServletContextAware {
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).newStream();
         }
-        System.out.println("refreshing " + path);
-        for (Resource resource : resourceRepository.listResources(path)) {
-            System.out.println("resource = " + resource.getPath() + "/" + resource.getName());
-            if (filter.accept(resource)) {
-                InputStream contents = resourceRepository.read(resource);
-                handler.handle(this.path, resource, contents);
+        try {
+            System.out.println("refreshing " + path);
+            for (Resource resource : resourceRepository.listResources(path)) {
+                System.out.println("resource = " + resource.getPath() + "/" + resource.getName());
+                if (filter.accept(resource)) {
+                    InputStream contents = resourceRepository.read(resource);
+                    handler.handle(this.path, resource, contents);
+                }
             }
-        }
-        for (Directory directory : resourceRepository.listDirectories(path)) {
-            System.out.println("directory = " + directory.getPath() + "/" + directory.getName());
-            refresh(directory.getPath() + "/" + directory.getName());
+            for (Directory directory : resourceRepository.listDirectories(path)) {
+                System.out.println("directory = " + directory.getPath() + "/" + directory.getName());
+                refresh(directory.getPath() + "/" + directory.getName());
+            }
+        }catch(FileNotFoundException ex){
+            // Nothing to refresh
         }
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).endOfStream();

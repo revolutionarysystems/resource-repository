@@ -7,3 +7,4 @@
 /provider-jackson/target
 /cloud/target
 /cloud/src/test/java/uk/co/revsys/resource/repository/cloud/JCloudResourceRepositoryTest.java
+/classpath/target

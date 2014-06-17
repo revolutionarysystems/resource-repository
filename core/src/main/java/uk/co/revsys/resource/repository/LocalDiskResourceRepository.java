@@ -19,16 +19,20 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 		this.repositoryBase = repositoryBase;
 	}
 
+    public File getRepositoryBase() {
+        return repositoryBase;
+    }
+
 	@Override
 	public void write(Resource resource, InputStream inputStream) throws IOException {
-		File directory = new File(repositoryBase, resource.getPath());
+		File directory = getFile(resource.getPath());
 		File file = new File(directory, resource.getName());
 		FileUtils.copyInputStreamToFile(inputStream, file);
 	}
 
 	@Override
 	public InputStream read(Resource resource) throws IOException {
-		File directory = new File(repositoryBase, resource.getPath());
+		File directory = getFile(resource.getPath());
 		File file = new File(directory, resource.getName());
 		return FileUtils.openInputStream(file);
 	}
@@ -36,14 +40,14 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	@Override
 	public void delete(Resource resource) throws IOException {
 		System.out.println("delete");
-		File directory = new File(repositoryBase, resource.getPath());
+		File directory = getFile(resource.getPath());
 		File file = new File(directory, resource.getName());
 		FileUtils.forceDelete(file);
 	}
 
 	@Override
 	public void delete(Directory directory) throws IOException {
-		File parent = new File(repositoryBase, directory.getPath());
+		File parent = getFile(directory.getPath());
 		File dir = new File(parent, directory.getName());
 		FileUtils.deleteDirectory(dir);
 	}
@@ -51,7 +55,7 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	@Override
 	public List<RepositoryItem> list(String path) throws IOException {
 		List<RepositoryItem> list = new LinkedList<RepositoryItem>();
-		File directory = new File(repositoryBase, path);
+		File directory = getFile(path);
 		for (File file : directory.listFiles()) {
 			RepositoryItem item;
 			if (file.isDirectory()) {
@@ -70,7 +74,7 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	@Override
 	public List<Directory> listDirectories(String path) throws IOException {
 		List<Directory> list = new LinkedList<Directory>();
-		File directory = new File(repositoryBase, path);
+		File directory = getFile(path);
 		for (File file : directory.listFiles()) {
 			Directory item;
 			if (file.isDirectory()) {
@@ -84,7 +88,7 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	@Override
 	public List<Resource> listResources(String path) throws IOException {
 		List<Resource> list = new LinkedList<Resource>();
-		File directory = new File(repositoryBase, path);
+		File directory = getFile(path);
 		for (File file : directory.listFiles()) {
 			Resource item;
 			if (!file.isDirectory()) {
@@ -97,5 +101,9 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 		}
 		return list;
 	}
+    
+    public File getFile(String path) throws IOException{
+        return new File(repositoryBase, path);
+    }
 
 }
