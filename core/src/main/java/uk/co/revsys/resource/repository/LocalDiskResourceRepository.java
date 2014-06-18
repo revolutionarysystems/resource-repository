@@ -16,6 +16,7 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	private final File repositoryBase;
 
 	public LocalDiskResourceRepository(File repositoryBase) {
+        System.out.println("repositoryBase = " + repositoryBase.getAbsolutePath());
 		this.repositoryBase = repositoryBase;
 	}
 

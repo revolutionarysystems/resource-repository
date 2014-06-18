@@ -17,7 +17,8 @@ public class JacksonResourceConverter<I extends Object> extends AbstractResource
     
     @Override
     public I convert(InputStream contents) throws IOException {
-        return objectMapper.readValue(contents, type);
+        I result = objectMapper.readValue(contents, type);
+        return result;
     }
 
 }

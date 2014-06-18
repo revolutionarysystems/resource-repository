@@ -1,4 +1,4 @@
-package uk.co.revsys.resource.repository.provider;
+package uk.co.revsys.resource.repository.provider.servlet;
 
 import javax.servlet.ServletContext;
 

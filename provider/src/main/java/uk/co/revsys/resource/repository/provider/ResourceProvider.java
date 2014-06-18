@@ -5,15 +5,13 @@ import uk.co.revsys.resource.repository.provider.handler.ResourceHandler;
 import uk.co.revsys.resource.repository.provider.filter.ResourceFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import javax.servlet.ServletContext;
-import org.apache.commons.io.filefilter.FileFileFilter;
 import uk.co.revsys.resource.repository.ResourceRepository;
 import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.Resource;
 import uk.co.revsys.resource.repository.provider.handler.FilteringResourceHandler;
 import uk.co.revsys.resource.repository.provider.handler.StreamAwareResourceHandler;
 
-public class ResourceProvider implements ServletContextAware {
+public class ResourceProvider{
 
     private final ResourceRepository resourceRepository;
     private final String path;
@@ -29,13 +27,6 @@ public class ResourceProvider implements ServletContextAware {
 
     public ResourceProvider(ResourceRepository resourceRepository, String path, FilteringResourceHandler handler) {
         this(resourceRepository, path, handler, handler);
-    }
-
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        if (handler instanceof ServletContextAware) {
-            ((ServletContextAware) handler).setServletContext(servletContext);
-        }
     }
 
     public void refresh() throws IOException {
@@ -65,5 +56,21 @@ public class ResourceProvider implements ServletContextAware {
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).endOfStream();
         }
+    }
+
+    public ResourceRepository getResourceRepository() {
+        return resourceRepository;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public ResourceFilter getFilter() {
+        return filter;
+    }
+
+    public ResourceHandler getHandler() {
+        return handler;
     }
 }
