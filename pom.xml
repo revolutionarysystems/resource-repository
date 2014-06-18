@@ -16,6 +16,7 @@
         <module>classpath</module>
 		<module>service</module>
         <module>provider</module>
+        <module>provider-servlet</module>
         <module>provider-jackson</module>
 	</modules>
 
