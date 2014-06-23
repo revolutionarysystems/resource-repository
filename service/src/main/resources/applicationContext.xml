@@ -17,10 +17,10 @@
 		</property>
 	</bean>
 	
-	<bean id="resourceRepository" class="uk.co.revsys.resource.repository.LocalDiskResourceRepository">
+	<!--bean id="resourceRepository" class="uk.co.revsys.resource.repository.LocalDiskResourceRepository">
 		<constructor-arg index="0" value="${local.disk.path}"/>
-	</bean>
-	<!--
+	</bean-->
+	
 	<bean id="resourceRepository" class="uk.co.revsys.resource.repository.JCloudResourceRepository">
 		<constructor-arg index="0" ref="blobStore"/>
 		<constructor-arg index="1" value="${cloud.container}"/>
@@ -42,7 +42,7 @@
     </bean>
  
 	<bean id="blobStore" factory-bean="blobStoreContext" factory-method="getBlobStore"/>
-	-->
+	
 	<bean id="templateLoader" class="de.neuland.jade4j.spring.template.SpringTemplateLoader">
 		<property name="basePath" value="/WEB-INF/views/" />
 	</bean>
