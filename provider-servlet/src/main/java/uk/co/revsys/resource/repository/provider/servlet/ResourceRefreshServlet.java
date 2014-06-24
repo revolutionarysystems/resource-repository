@@ -20,8 +20,8 @@ public class ResourceRefreshServlet extends HttpServlet{
         super.init(config);
         WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
         resourceProvider = webApplicationContext.getBean(ResourceProvider.class);
-        if(resourceProvider instanceof ServletContextAware){
-            ((ServletContextAware)resourceProvider).setServletContext(getServletContext());
+        if(resourceProvider.getHandler() instanceof ServletContextAware){
+            ((ServletContextAware)resourceProvider.getHandler()).setServletContext(getServletContext());
         }
     }
 
