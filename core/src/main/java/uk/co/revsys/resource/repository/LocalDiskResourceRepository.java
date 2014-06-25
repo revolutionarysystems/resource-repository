@@ -16,7 +16,6 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	private final File repositoryBase;
 
 	public LocalDiskResourceRepository(File repositoryBase) {
-        System.out.println("repositoryBase = " + repositoryBase.getAbsolutePath());
 		this.repositoryBase = repositoryBase;
 	}
 
@@ -40,7 +39,6 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 
 	@Override
 	public void delete(Resource resource) throws IOException {
-		System.out.println("delete");
 		File directory = getFile(resource.getPath());
 		File file = new File(directory, resource.getName());
 		FileUtils.forceDelete(file);
