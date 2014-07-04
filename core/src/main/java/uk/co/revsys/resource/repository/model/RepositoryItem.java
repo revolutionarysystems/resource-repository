@@ -8,6 +8,11 @@ public abstract class RepositoryItem {
 	private String path;
 	private Map<String, String> metadata;
 
+    public RepositoryItem(String name) {
+        this.name = name;
+        this.path = "";
+    }
+
 	public RepositoryItem(String path, String name) {
 		this.name = name;
 		this.path = path;
@@ -26,8 +31,19 @@ public abstract class RepositoryItem {
 	}
 
 	public void setPath(String path) {
+        if(path == null){
+            this.path = "";
+        }
 		this.path = path;
 	}
+    
+    public String getFullPath(){
+        String filepath = getPath();
+        if(!filepath.isEmpty() && !filepath.endsWith("/")){
+            filepath = filepath + "/";
+        }
+        return filepath + getName();
+    }
 
 	public Map<String, String> getMetadata() {
 		return metadata;

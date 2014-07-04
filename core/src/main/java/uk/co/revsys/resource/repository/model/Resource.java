@@ -6,6 +6,10 @@ public class Resource extends RepositoryItem{
 
 	private Date lastModified;
 	private long size;
+
+    public Resource(String name) {
+        super(name);
+    }
 	
 	public Resource(String path, String name) {
 		super(path, name);

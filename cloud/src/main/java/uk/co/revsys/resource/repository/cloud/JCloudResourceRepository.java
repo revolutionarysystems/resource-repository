@@ -46,16 +46,16 @@ public class JCloudResourceRepository implements ResourceRepository {
 	public void write(Resource resource, final InputStream inputStream) throws IOException {
         LOGGER.debug("Writing resource: container = " + container + ", baseDir = " + baseDir + ", path = " + resource.getPath() + ", name = " + resource.getName());
 		byte[] content = IOUtils.toByteArray(inputStream);
-		Blob blob = blobStore.blobBuilder(baseDir + resource.getPath() + "/" + resource.getName()).payload(content).contentLength(content.length).build();
+		Blob blob = blobStore.blobBuilder(baseDir + resource.getFullPath()).payload(content).contentLength(content.length).build();
 		blobStore.putBlob(container, blob);
 	}
 
 	@Override
 	public InputStream read(Resource resource) throws IOException {
         LOGGER.debug("Reading resource: container = " + container + ", baseDir = " + baseDir + ", path = " + resource.getPath() + ", name = " + resource.getName());
-		Blob blob = blobStore.getBlob(container, baseDir + resource.getPath() + "/" + resource.getName());
+		Blob blob = blobStore.getBlob(container, baseDir + resource.getFullPath());
         if(blob == null){
-            throw new FileNotFoundException(resource.getPath() + "/" + resource.getName());
+            throw new FileNotFoundException(resource.getFullPath());
         }
 		return blob.getPayload().getInput();
 	}
@@ -63,7 +63,7 @@ public class JCloudResourceRepository implements ResourceRepository {
 	@Override
 	public void delete(Resource resource) throws IOException {
         LOGGER.debug("Deleting resource: container = " + container + ", baseDir = " + baseDir + ", path = " + resource.getPath() + ", name = " + resource.getName());
-		blobStore.removeBlob(container, baseDir + resource.getPath() + "/" + resource.getName());
+		blobStore.removeBlob(container, baseDir + resource.getFullPath());
 	}
 
 	@Override
