@@ -1,5 +1,6 @@
 package uk.co.revsys.resource.repository.cloud;
 
+import java.io.FileNotFoundException;
 import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.RepositoryItem;
 import uk.co.revsys.resource.repository.model.Resource;
@@ -14,10 +15,14 @@ import org.jclouds.blobstore.domain.PageSet;
 import org.jclouds.blobstore.domain.StorageMetadata;
 import org.jclouds.blobstore.domain.StorageType;
 import org.jclouds.blobstore.options.ListContainerOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.revsys.resource.repository.ResourceRepository;
 
 public class JCloudResourceRepository implements ResourceRepository {
 
+    private Logger LOGGER = LoggerFactory.getLogger(JCloudResourceRepository.class);
+    
 	private final BlobStore blobStore;
 	private final String container;
     private final String baseDir;
@@ -31,7 +36,7 @@ public class JCloudResourceRepository implements ResourceRepository {
     public JCloudResourceRepository(BlobStore blobStore, String container, String baseDir) {
         this.blobStore = blobStore;
         this.container = container;
-        if(!baseDir.endsWith("/")){
+        if(!baseDir.isEmpty() && !baseDir.endsWith("/")){
             baseDir = baseDir + "/";
         }
         this.baseDir = baseDir;
@@ -39,6 +44,7 @@ public class JCloudResourceRepository implements ResourceRepository {
 
 	@Override
 	public void write(Resource resource, final InputStream inputStream) throws IOException {
+        LOGGER.debug("Writing resource: container = " + container + ", baseDir = " + baseDir + ", path = " + resource.getPath() + ", name = " + resource.getName());
 		byte[] content = IOUtils.toByteArray(inputStream);
 		Blob blob = blobStore.blobBuilder(baseDir + resource.getPath() + "/" + resource.getName()).payload(content).contentLength(content.length).build();
 		blobStore.putBlob(container, blob);
@@ -46,22 +52,29 @@ public class JCloudResourceRepository implements ResourceRepository {
 
 	@Override
 	public InputStream read(Resource resource) throws IOException {
+        LOGGER.debug("Reading resource: container = " + container + ", baseDir = " + baseDir + ", path = " + resource.getPath() + ", name = " + resource.getName());
 		Blob blob = blobStore.getBlob(container, baseDir + resource.getPath() + "/" + resource.getName());
+        if(blob == null){
+            throw new FileNotFoundException(resource.getPath() + "/" + resource.getName());
+        }
 		return blob.getPayload().getInput();
 	}
 
 	@Override
 	public void delete(Resource resource) throws IOException {
+        LOGGER.debug("Deleting resource: container = " + container + ", baseDir = " + baseDir + ", path = " + resource.getPath() + ", name = " + resource.getName());
 		blobStore.removeBlob(container, baseDir + resource.getPath() + "/" + resource.getName());
 	}
 
 	@Override
 	public void delete(Directory directory) throws IOException {
+        LOGGER.debug("Reading directory: container = " + container + ", baseDir = " + baseDir + ", path = " + directory.getPath() + ", name = " + directory.getName());
 		blobStore.clearContainer(container, new ListContainerOptions().inDirectory(baseDir + directory.getPath() + "/" + directory.getName()).recursive());
 	}
 
 	@Override
 	public List<RepositoryItem> list(String path) throws IOException {
+        LOGGER.debug("Listing directory: container = " + container + ", baseDir = " + baseDir + ", path = " + path);
 		List<RepositoryItem> resources = new LinkedList<RepositoryItem>();
 		ListContainerOptions listContainerOptions = new ListContainerOptions();
 		if (!path.isEmpty()) {
@@ -87,6 +100,7 @@ public class JCloudResourceRepository implements ResourceRepository {
 
 	@Override
 	public List<Directory> listDirectories(String path) throws IOException {
+        LOGGER.debug("Listing directories: container = " + container + ", baseDir = " + baseDir + ", path = " + path);
         System.out.println("listDirectories: " + path);
 		List<Directory> directories = new LinkedList<Directory>();
 		ListContainerOptions listContainerOptions = new ListContainerOptions();
@@ -107,7 +121,7 @@ public class JCloudResourceRepository implements ResourceRepository {
 
 	@Override
 	public List<Resource> listResources(String path) throws IOException {
-        System.out.println("listResources: " + path);
+        LOGGER.debug("Listing resources: container = " + container + ", baseDir = " + baseDir + ", path = " + path);
 		List<Resource> resources = new LinkedList<Resource>();
 		ListContainerOptions listContainerOptions = new ListContainerOptions();
 		if (!path.isEmpty()) {
