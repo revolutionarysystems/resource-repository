@@ -102,7 +102,7 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	}
     
     public File getFile(String path) throws IOException{
-        return new File(repositoryBase, path);
+        return new File(getRepositoryBase(), path);
     }
 
 }
