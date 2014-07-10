@@ -30,25 +30,37 @@ public class ResourceProvider{
     }
 
     public void refresh() throws IOException {
-        refresh(this.path);
+        refresh(this.path, true);
     }
 
-    private void refresh(String path) throws IOException {
+    private void refresh(String path, boolean testIfResource) throws IOException {
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).newStream();
         }
         try {
             System.out.println("refreshing " + path);
+            boolean itemFound = false;
             for (Resource resource : resourceRepository.listResources(path)) {
                 System.out.println("resource = " + resource.getPath() + "/" + resource.getName());
+                itemFound = true;
                 if (filter.accept(resource)) {
                     InputStream contents = resourceRepository.read(resource);
                     handler.handle(this.path, resource, contents);
                 }
             }
             for (Directory directory : resourceRepository.listDirectories(path)) {
+                itemFound = true;
                 System.out.println("directory = " + directory.getPath() + "/" + directory.getName());
-                refresh(directory.getPath() + "/" + directory.getName());
+                refresh(directory.getPath() + "/" + directory.getName(), false);
+            }
+            if(!itemFound && testIfResource){
+                String name = path.substring(path.lastIndexOf("/")+1);
+                path = path.substring(0, path.lastIndexOf("/"));
+                Resource resource = new Resource(path, name);
+                if(filter.accept(resource)){
+                    InputStream contents = resourceRepository.read(resource);
+                    handler.handle(this.path, resource, contents);
+                }
             }
         }catch(FileNotFoundException ex){
             // Nothing to refresh
