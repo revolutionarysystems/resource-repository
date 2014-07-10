@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>resource-repository-provider-jackson</artifactId>
+	<artifactId>resource-repository-provider-json</artifactId>
 	<packaging>jar</packaging>
-	<name>Resource Repository Provider - Jackson</name>
-	<description>Resource Repository Provider - Jackson</description>
+	<name>Resource Repository Provider - JSON</name>
+	<description>Resource Repository Provider - JSON</description>
    
 	<parent>
 		<groupId>uk.co.revsys.resource-repository</groupId>

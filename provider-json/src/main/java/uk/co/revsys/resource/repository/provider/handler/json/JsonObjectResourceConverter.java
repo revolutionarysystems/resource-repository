@@ -1,16 +1,16 @@
-package uk.co.revsys.resource.repository.provider.handler.jackson;
+package uk.co.revsys.resource.repository.provider.handler.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
-import uk.co.revsys.resource.repository.provider.handler.AbstractResourceConverter;
+import uk.co.revsys.resource.repository.provider.handler.AbstractResourcesConverter;
 
-public class JacksonResourceConverter<I extends Object> extends AbstractResourceConverter<I>{
+public class JsonObjectResourceConverter<I extends Object> extends AbstractResourcesConverter<I>{
 
     private final ObjectMapper objectMapper;
     private final Class<? extends I> type;
 
-    public JacksonResourceConverter(ObjectMapper objectMapper, Class<? extends I> type) {
+    public JsonObjectResourceConverter(ObjectMapper objectMapper, Class<? extends I> type) {
         this.objectMapper = objectMapper;
         this.type = type;
     }
