@@ -4,6 +4,7 @@ import uk.co.revsys.resource.repository.ResourceRepository;
 import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.Resource;
 import de.neuland.jade4j.spring.view.JadeViewResolver;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -74,6 +75,8 @@ public class ResourceRepositoryServlet extends HttpServlet {
 				InputStream resourceStream = resourceRepository.read(new Resource(resourcePath, resourceName));
 				IOUtils.copy(resourceStream, resp.getOutputStream());
 			}
+		} catch (FileNotFoundException ex) {
+			resp.sendError(404);
 		} catch (Exception ex) {
 			throw new ServletException(ex);
 		}
