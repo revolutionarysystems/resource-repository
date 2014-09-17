@@ -4,6 +4,7 @@ import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.RepositoryItem;
 import uk.co.revsys.resource.repository.model.Resource;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -48,6 +49,9 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	public void delete(Directory directory) throws IOException {
 		File parent = getFile(directory.getPath());
 		File dir = new File(parent, directory.getName());
+        if(!dir.exists()){
+            throw new FileNotFoundException(dir.getPath());
+        }
 		FileUtils.deleteDirectory(dir);
 	}
 
@@ -55,6 +59,9 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	public List<RepositoryItem> list(String path) throws IOException {
 		List<RepositoryItem> list = new LinkedList<RepositoryItem>();
 		File directory = getFile(path);
+        if(!directory.exists()){
+            throw new FileNotFoundException(path);
+        }
 		for (File file : directory.listFiles()) {
 			RepositoryItem item;
 			if (file.isDirectory()) {
@@ -74,6 +81,9 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	public List<Directory> listDirectories(String path) throws IOException {
 		List<Directory> list = new LinkedList<Directory>();
 		File directory = getFile(path);
+        if(!directory.exists()){
+            throw new FileNotFoundException(path);
+        }
 		for (File file : directory.listFiles()) {
 			Directory item;
 			if (file.isDirectory()) {
@@ -88,6 +98,9 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	public List<Resource> listResources(String path) throws IOException {
 		List<Resource> list = new LinkedList<Resource>();
 		File directory = getFile(path);
+        if(!directory.exists()){
+            throw new FileNotFoundException(path);
+        }
 		for (File file : directory.listFiles()) {
 			Resource item;
 			if (!file.isDirectory()) {
