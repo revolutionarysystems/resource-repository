@@ -11,7 +11,7 @@ import uk.co.revsys.resource.repository.model.Resource;
 import uk.co.revsys.resource.repository.provider.handler.FilteringResourceHandler;
 import uk.co.revsys.resource.repository.provider.handler.StreamAwareResourceHandler;
 
-public class ResourceProvider{
+public class ResourceProvider {
 
     private final ResourceRepository resourceRepository;
     private final String path;
@@ -37,9 +37,9 @@ public class ResourceProvider{
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).newStream();
         }
+        System.out.println("refreshing " + path);
+        boolean itemFound = false;
         try {
-            System.out.println("refreshing " + path);
-            boolean itemFound = false;
             for (Resource resource : resourceRepository.listResources(path)) {
                 System.out.println("resource = " + resource.getPath() + "/" + resource.getName());
                 itemFound = true;
@@ -53,17 +53,25 @@ public class ResourceProvider{
                 System.out.println("directory = " + directory.getPath() + "/" + directory.getName());
                 refresh(directory.getPath() + "/" + directory.getName(), false);
             }
-            if(!itemFound && testIfResource){
-                String name = path.substring(path.lastIndexOf("/")+1);
-                path = path.substring(0, path.lastIndexOf("/"));
-                Resource resource = new Resource(path, name);
-                if(filter.accept(resource)){
+        } catch (FileNotFoundException ex) {
+            // Nothing to refresh
+        }
+        if (!itemFound && testIfResource) {
+            try {
+                String name = path;
+                String thisPath = "";
+                if(path.indexOf("/") > -1){
+                    name = path.substring(path.lastIndexOf("/") + 1);
+                    thisPath = path.substring(0, path.lastIndexOf("/"));
+                }
+                Resource resource = new Resource(thisPath, name);
+                if (filter.accept(resource)) {
                     InputStream contents = resourceRepository.read(resource);
                     handler.handle(this.path, resource, contents);
                 }
+            } catch (FileNotFoundException ex) {
+                // Nothing to refresh
             }
-        }catch(FileNotFoundException ex){
-            // Nothing to refresh
         }
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).endOfStream();

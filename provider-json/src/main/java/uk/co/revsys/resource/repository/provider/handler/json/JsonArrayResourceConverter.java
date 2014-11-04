@@ -23,7 +23,9 @@ public class JsonArrayResourceConverter<I extends Object> implements ResourceCon
 
     @Override
     public void handle(String path, Resource resource, InputStream contents) throws IOException {
+        System.out.println("handle");
         List<I> items = objectMapper.readValue(contents, type);
+        System.out.println("items = " + items);
         result.addAll(items);
     }
 
@@ -39,6 +41,7 @@ public class JsonArrayResourceConverter<I extends Object> implements ResourceCon
 
     @Override
     public List<I> getResult() {
+        System.out.println("get result");
         return result;
     }
 

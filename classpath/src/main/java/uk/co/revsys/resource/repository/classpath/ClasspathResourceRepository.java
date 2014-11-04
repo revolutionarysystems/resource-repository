@@ -2,11 +2,13 @@ package uk.co.revsys.resource.repository.classpath;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
 import uk.co.revsys.resource.repository.LocalDiskResourceRepository;
+import uk.co.revsys.resource.repository.model.Directory;
+import uk.co.revsys.resource.repository.model.Resource;
 
 public class ClasspathResourceRepository extends LocalDiskResourceRepository implements ResourceLoaderAware{
 
@@ -30,6 +32,21 @@ public class ClasspathResourceRepository extends LocalDiskResourceRepository imp
         } catch (IOException ex) {
             return null;
         }
+    }
+
+    @Override
+    public void delete(Directory directory) throws IOException {
+        throw new AccessDeniedException(directory.getFullPath());
+    }
+
+    @Override
+    public void delete(Resource resource) throws IOException {
+        throw new AccessDeniedException(resource.getFullPath());
+    }
+
+    @Override
+    public void write(Resource resource, InputStream inputStream) throws IOException {
+        throw new AccessDeniedException(resource.getFullPath());
     }
 
 }

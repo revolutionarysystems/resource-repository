@@ -98,7 +98,7 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 	public List<Resource> listResources(String path) throws IOException {
 		List<Resource> list = new LinkedList<Resource>();
 		File directory = getFile(path);
-        if(!directory.exists()){
+        if(!directory.exists() || !directory.isDirectory()){
             throw new FileNotFoundException(path);
         }
 		for (File file : directory.listFiles()) {
