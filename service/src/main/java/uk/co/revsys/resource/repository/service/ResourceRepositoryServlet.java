@@ -1,15 +1,17 @@
 package uk.co.revsys.resource.repository.service;
 
+import de.neuland.jade4j.JadeConfiguration;
+import de.neuland.jade4j.template.ClasspathTemplateLoader;
 import uk.co.revsys.resource.repository.ResourceRepository;
 import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.Resource;
-import de.neuland.jade4j.spring.view.JadeViewResolver;
+import de.neuland.jade4j.template.FileTemplateLoader;
+import de.neuland.jade4j.template.JadeTemplate;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,12 +26,11 @@ import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.servlet.View;
 
 public class ResourceRepositoryServlet extends HttpServlet {
 
 	private ResourceRepository resourceRepository;
-	private JadeViewResolver viewResolver;
+	private JadeConfiguration jadeConfig;
 	private DiskFileItemFactory factory;
 	private ServletFileUpload upload;
 
@@ -37,7 +38,11 @@ public class ResourceRepositoryServlet extends HttpServlet {
 	public void init() throws ServletException {
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		this.resourceRepository = webApplicationContext.getBean(ResourceRepository.class);
-		this.viewResolver = webApplicationContext.getBean(JadeViewResolver.class);
+		//this.viewResolver = webApplicationContext.getBean(JadeViewResolver.class);
+        jadeConfig = new JadeConfiguration();
+        jadeConfig.setTemplateLoader(new ClasspathTemplateLoader());
+        jadeConfig.setCaching(false);
+        jadeConfig.setPrettyPrint(false);
 		this.factory = new DiskFileItemFactory();
 		this.upload = new ServletFileUpload(factory);
 	}
@@ -66,8 +71,8 @@ public class ResourceRepositoryServlet extends HttpServlet {
 						parentPath = req.getContextPath() + "/";
 					}
 					model.put("parentPath", parentPath);
-					View view = viewResolver.resolveViewName("./resources.jade", Locale.getDefault());
-					view.render(model, req, resp);
+                    JadeTemplate template = jadeConfig.getTemplate("views/resources.jade");
+                    jadeConfig.renderTemplate(template, model, resp.getWriter());
 				}
 			} else {
 				String resourcePath = filePath.substring(0, filePath.lastIndexOf("/"));
@@ -76,6 +81,7 @@ public class ResourceRepositoryServlet extends HttpServlet {
 				IOUtils.copy(resourceStream, resp.getOutputStream());
 			}
 		} catch (FileNotFoundException ex) {
+            ex.printStackTrace();
 			resp.sendError(404);
 		} catch (Exception ex) {
 			throw new ServletException(ex);
