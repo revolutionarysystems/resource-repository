@@ -76,6 +76,8 @@ public class JCloudResourceRepository implements ResourceRepository {
     public List<RepositoryItem> list(String path) throws IOException {
         if (path.equals(".")) {
             path = "";
+        }else if(path.startsWith("./")){
+            path = path.substring(2);
         }
         LOGGER.debug("Listing directory: container = " + container + ", baseDir = " + baseDir + ", path = " + path);
         List<RepositoryItem> resources = new LinkedList<RepositoryItem>();
@@ -105,6 +107,8 @@ public class JCloudResourceRepository implements ResourceRepository {
     public List<Directory> listDirectories(String path) throws IOException {
         if (path.equals(".")) {
             path = "";
+        }else if(path.startsWith("./")){
+            path = path.substring(2);
         }
         LOGGER.debug("Listing directories: container = " + container + ", baseDir = " + baseDir + ", path = " + path);
         List<Directory> directories = new LinkedList<Directory>();
@@ -129,6 +133,8 @@ public class JCloudResourceRepository implements ResourceRepository {
     public List<Resource> listResources(String path) throws IOException {
         if (path.equals(".")) {
             path = "";
+        }else if(path.startsWith("./")){
+            path = path.substring(2);
         }
         LOGGER.debug("Listing resources: container = " + container + ", baseDir = " + baseDir + ", path = " + path);
         List<Resource> resources = new LinkedList<Resource>();

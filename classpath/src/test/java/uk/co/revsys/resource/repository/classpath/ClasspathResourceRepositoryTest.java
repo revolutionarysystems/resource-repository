@@ -1,10 +1,7 @@
 
 package uk.co.revsys.resource.repository.classpath;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,7 +11,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import uk.co.revsys.resource.repository.ResourceRepository;
-import uk.co.revsys.resource.repository.model.Directory;
 import uk.co.revsys.resource.repository.model.Resource;
 
 public class ClasspathResourceRepositoryTest {
