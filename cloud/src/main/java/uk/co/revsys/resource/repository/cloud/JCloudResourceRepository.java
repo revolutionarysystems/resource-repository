@@ -6,6 +6,7 @@ import uk.co.revsys.resource.repository.model.RepositoryItem;
 import uk.co.revsys.resource.repository.model.Resource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -40,6 +41,11 @@ public class JCloudResourceRepository implements ResourceRepository {
             baseDir = baseDir + "/";
         }
         this.baseDir = baseDir;
+    }
+
+    @Override
+    public OutputStream getOutputStream(Resource resource) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

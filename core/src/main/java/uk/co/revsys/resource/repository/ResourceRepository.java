@@ -11,6 +11,7 @@ import uk.co.revsys.resource.repository.model.RepositoryItem;
 import uk.co.revsys.resource.repository.model.Resource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ public interface ResourceRepository {
 	
 	public void write(Resource resource, InputStream inputStream) throws IOException;
 	
+    public OutputStream getOutputStream(Resource resource) throws IOException;
+    
 	public InputStream read(Resource resource) throws IOException;
 	
 	public void delete(Resource resource) throws IOException;

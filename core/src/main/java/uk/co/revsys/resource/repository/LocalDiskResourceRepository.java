@@ -5,8 +5,10 @@ import uk.co.revsys.resource.repository.model.RepositoryItem;
 import uk.co.revsys.resource.repository.model.Resource;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +24,13 @@ public class LocalDiskResourceRepository implements ResourceRepository {
 
     public File getRepositoryBase() {
         return repositoryBase;
+    }
+
+    @Override
+    public OutputStream getOutputStream(Resource resource) throws IOException {
+        File directory = getFile(resource.getPath());
+		File file = new File(directory, resource.getName());
+        return new FileOutputStream(file);
     }
 
 	@Override
