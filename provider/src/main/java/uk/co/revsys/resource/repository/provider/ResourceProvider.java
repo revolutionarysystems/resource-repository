@@ -37,11 +37,11 @@ public class ResourceProvider {
         if (handler instanceof StreamAwareResourceHandler) {
             ((StreamAwareResourceHandler) handler).newStream();
         }
-        System.out.println("refreshing " + path);
+        System.out.println("Refreshing " + path);
         boolean itemFound = false;
         try {
             for (Resource resource : resourceRepository.listResources(path)) {
-                System.out.println("resource = " + resource.getPath() + "/" + resource.getName());
+                System.out.println("Resource = " + resource.getPath() + "/" + resource.getName());
                 itemFound = true;
                 if (filter.accept(resource)) {
                     InputStream contents = resourceRepository.read(resource);
@@ -50,11 +50,11 @@ public class ResourceProvider {
             }
             for (Directory directory : resourceRepository.listDirectories(path)) {
                 itemFound = true;
-                System.out.println("directory = " + directory.getPath() + "/" + directory.getName());
+                System.out.println("Directory = " + directory.getPath() + "/" + directory.getName());
                 refresh(directory.getPath() + "/" + directory.getName(), false);
             }
         } catch (FileNotFoundException ex) {
-            // Nothing to refresh
+            System.out.println("Nothing to refresh: " + ex.getMessage());
         }
         if (!itemFound && testIfResource) {
             try {
@@ -65,12 +65,13 @@ public class ResourceProvider {
                     thisPath = path.substring(0, path.lastIndexOf("/"));
                 }
                 Resource resource = new Resource(thisPath, name);
+                System.out.println("Resource = " + resource.getPath() + "/" + resource.getName());
                 if (filter.accept(resource)) {
                     InputStream contents = resourceRepository.read(resource);
                     handler.handle(this.path, resource, contents);
                 }
             } catch (FileNotFoundException ex) {
-                // Nothing to refresh
+                System.out.println("Nothing to refresh: " + ex.getMessage());
             }
         }
         if (handler instanceof StreamAwareResourceHandler) {

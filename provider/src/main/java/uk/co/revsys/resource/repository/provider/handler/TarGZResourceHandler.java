@@ -4,30 +4,29 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import uk.co.revsys.resource.repository.model.Resource;
 
-public class UnzippingResourceHandler implements ResourceHandler{
+public class TarGZResourceHandler implements ResourceHandler {
 
     private final ResourceHandler resourceHandler;
 
-    public UnzippingResourceHandler(ResourceHandler resourceHandler) {
+    public TarGZResourceHandler(ResourceHandler resourceHandler) {
         this.resourceHandler = resourceHandler;
     }
 
     @Override
     public void handle(String path, Resource resource, InputStream contents) throws IOException {
         System.out.println("Unzipping " + resource.getFullPath());
-        ZipInputStream zippedStream = new ZipInputStream(contents);
-        System.out.println("zippedStream = " + zippedStream);
-        ZipEntry zipEntry = zippedStream.getNextEntry();
-        System.out.println("zipEntry = " + zipEntry);
-        while (zipEntry != null) {
-            System.out.println(zipEntry.getName());
-            System.out.println(zipEntry.isDirectory());
-            if (!zipEntry.isDirectory()) {
-                String zipPath = zipEntry.getName();
+        GzipCompressorInputStream gzIn = new GzipCompressorInputStream(contents);
+        TarArchiveInputStream tarIn = new TarArchiveInputStream(gzIn);
+        TarArchiveEntry entry = null;
+        while ((entry = (TarArchiveEntry) tarIn.getNextEntry()) != null) {
+            System.out.println("Extracting: " + entry.getName());
+            if (!entry.isDirectory()) {
+                String zipPath = entry.getName();
                 String zipName;
                 if (zipPath.indexOf("/") > -1) {
                     zipName = zipPath.substring(zipPath.indexOf("/") + 1);
@@ -41,18 +40,14 @@ public class UnzippingResourceHandler implements ResourceHandler{
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 byte[] bytesIn = new byte[4096];
                 int read = 0;
-                while ((read = zippedStream.read(bytesIn)) != -1) {
+                while ((read = tarIn.read(bytesIn)) != -1) {
                     bos.write(bytesIn, 0, read);
                 }
                 resourceHandler.handle("", zipResource, new ByteArrayInputStream(bos.toByteArray()));
                 bos.close();
             }
-            zippedStream.closeEntry();
-            zipEntry = zippedStream.getNextEntry();
-            System.out.println("zipEntry = " + zipEntry);
         }
-        zippedStream.close();
-
+        tarIn.close();
     }
 
 }
