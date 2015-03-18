@@ -14,7 +14,6 @@
 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="realm"/>
-        <property name="sessionManager" ref="sessionManager"/>
         <property name="subjectDAO" ref="subjectDAO" />
     </bean>
     
