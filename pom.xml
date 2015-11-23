@@ -14,7 +14,7 @@
 		<module>core</module>
         <module>cloud</module>
         <module>classpath</module>
-		<module>service</module>
+		<!--module>service</module-->
         <module>provider</module>
         <module>provider-servlet</module>
         <module>provider-json</module>
